@@ -13,11 +13,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tasks', function (Blueprint $table) {
-            $table->id();
+            $table->id()->index();
             $table->timestamps();
 
-            $table->string('name');
-            $table->text('description')->nullable();
+            $table->string('name')->index();
+            $table->text('description')->nullable()->index();
+
+            // Depending on how often users filter by other columns, it might be better to index those too
             $table->string('status')->default(TaskStatusEnum::OPEN->value);
             $table->string('priority');
             $table->dateTime('completed_at')->nullable();

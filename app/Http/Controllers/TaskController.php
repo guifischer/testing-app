@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\TaskStatusEnum;
 use App\Http\Requests\TaskUpdateRequest;
-use App\Http\Resources\TaskDetailsResource;
 use App\Models\Task;
+use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -18,49 +17,45 @@ class TaskController extends Controller
     /**
      * Display the list of tasks
      */
-    public function show(Request $request): Response
+    public function show(Request $request, TaskService $taskService): Response
     {
-        return Inertia::render('Dashboard/Index', [
-            'tasks' => TaskDetailsResource::collection(Task::with("user")->get())->toArray($request),
-        ]);
+        $tasks = $taskService->getTasks($request);
+        return Inertia::render('Dashboard/Index', $tasks);
     }
 
     /**
      * create the task.
      */
-    public function create(TaskUpdateRequest $request): RedirectResponse
+    public function create(TaskUpdateRequest $request, TaskService $taskService): RedirectResponse
     {
-        Task::create($request->validated());
+        $taskService->create($request->validated(), $request->user()->id);
         return Redirect::route('dashboard');
     }
 
     /**
      * Update the task status to `in progress` and attribute it to the user.
      */
-    public function takeOn(Request $request, Task $task): RedirectResponse
+    public function takeOn(Request $request, TaskService $taskService, Task $task): RedirectResponse
     {
-        $task->user_id = $request->user()->id;
-        $task->status = TaskStatusEnum::IN_PROGRESS;
-        $task->save();
-
+        $taskService->takeOnTask($task, $request->user()->id);
         return Redirect::route('dashboard');
     }
 
     /**
      * Update the task information.
      */
-    public function update(TaskUpdateRequest $request, Task $task): RedirectResponse
+    public function update(TaskUpdateRequest $request, TaskService $taskService, Task $task): RedirectResponse
     {
-        $task->update($request->validated());
+        $taskService->update($task, $request->validated());
         return Redirect::route('dashboard');
     }
 
     /**
      * Delete the task
      */
-    public function destroy(Request $request, Task $task): RedirectResponse
+    public function destroy(Request $request, TaskService $taskService, Task $task): RedirectResponse
     {
-        $task->delete();
+        $taskService->delete($task);
         return Redirect::route('dashboard');
     }
 }
