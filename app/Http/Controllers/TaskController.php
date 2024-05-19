@@ -23,7 +23,7 @@ class TaskController extends Controller
     {
         $tasks = $taskService->getTasks($request);
         return Inertia::render('Dashboard/Index', [
-            'filters' => $request->all('search', 'status', 'owner', 'order_by', 'order_type'),
+            'filters' => $request->all('search', 'status', 'owner', 'order_by', 'order_direction'),
             'taskStatus' => TaskStatusEnum::options(),
             'taskPriorities' => TaskPriorityEnum::options(),
             'tasks' => $tasks,

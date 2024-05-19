@@ -16,9 +16,12 @@ class TaskService
 
     public function getTasks(Request $request): AnonymousResourceCollection
     {
+        $orderBy = empty($request->get('order_by')) ? 'created_at' : $request->get('order_by');
+        $orderDirection = !empty($request->get('order_direction')) ? $request->get('order_direction') : 'desc';
+
         $tasks = Task::query()
                 ->filter($request->only('search', 'status', 'owner'))
-                ->orderBy($request->get('order_by', 'created_at'), $request->get('order_type', 'desc'))
+                ->orderBy($orderBy, $orderDirection)
                 ->paginate(10)
                 ->withQueryString();
 

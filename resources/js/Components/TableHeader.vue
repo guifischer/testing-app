@@ -8,20 +8,20 @@ const props = defineProps({
     orderBy: {
         type: String,
     },
-    orderType: {
+    orderDirection: {
         type: String,
     },
 });
 
 const changeOrder = (key) => {
-    let type = 'asc';
+    let direction = 'asc';
     if (props.orderBy === key) {
-        type = props.orderType === 'asc' ? 'desc' : 'asc';
+        direction = props.orderDirection === 'asc' ? 'desc' : 'asc';
     }
 
     emit('changeOrder', {
         order_by: key,
-        order_type: type,
+        order_direction: direction,
     })
 }
 
@@ -38,7 +38,7 @@ const changeOrder = (key) => {
                         </span>
 
                         <template v-if="orderBy === header.key">
-                            <span v-if="orderType === 'asc'">▲</span>
+                            <span v-if="orderDirection === 'asc'">▲</span>
                             <span v-else>▼</span>
                         </template>
                         <template v-else>

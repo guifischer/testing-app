@@ -23,9 +23,9 @@ const props = defineProps({
 let delayTimeout;
 const form = useForm(props.filters);
 
-const changeOrder = ({order_by, order_type}) => {
+const changeOrder = ({order_by, order_direction}) => {
     form.order_by = order_by;
-    form.order_type = order_type;
+    form.order_direction = order_direction;
 };
 
 const takeOn = (task_id) => {
@@ -84,7 +84,7 @@ watch(form, data => {
                 :tableHeaders="headerData"
                 @changeOrder="changeOrder"
                 :order-by="form.order_by"
-                :order-type="form.order_type"
+                :order-direction="form.order_direction"
             />
             <tbody>
             <template v-for="(task, index) in tasks.data" :key="index">
