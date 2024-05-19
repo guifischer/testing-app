@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TaskPriorityEnum;
+use App\Enums\TaskStatusEnum;
 use App\Http\Requests\TaskUpdateRequest;
 use App\Models\Task;
 use App\Services\TaskService;
@@ -20,7 +22,12 @@ class TaskController extends Controller
     public function show(Request $request, TaskService $taskService): Response
     {
         $tasks = $taskService->getTasks($request);
-        return Inertia::render('Dashboard/Index', $tasks);
+        return Inertia::render('Dashboard/Index', [
+            'filters' => $request->all('search', 'status', 'owner', 'order_by', 'order_type'),
+            'taskStatus' => TaskStatusEnum::options(),
+            'taskPriorities' => TaskPriorityEnum::options(),
+            'tasks' => $tasks,
+        ]);
     }
 
     /**
