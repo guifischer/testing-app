@@ -42,7 +42,7 @@ const changeOrder = (key) => {
                             <span v-else>▼</span>
                         </template>
                         <template v-else>
-                            <span>⇅</span>
+                            <span style="color: #99999980;">⇅</span>
                         </template>
 
                     </template>

@@ -45,8 +45,9 @@ watch(form, data => {
     clearTimeout(delayTimeout);
 
     delayTimeout = setTimeout(() => {
-        data.get('/dashboard', data, {
-            preserveState: true
+        data.get('/dashboard', {
+            preserveState: true,
+            preserveScroll: true,
         });
 
     }, 500);

@@ -15,7 +15,7 @@ const props = defineProps({
         <div class="pagination">
             <template v-for="(link, key) in links">
                 <div v-if="link.url === null" :key="key" v-html="link.label" class="pagination-button"/>
-                <Link v-else :key="`link-${key}`" class="pagination-link" :class="{ 'link-active': link.active }" :href="link.url" v-html="link.label"/>
+                <Link v-else :key="`link-${key}`" class="pagination-link" :class="{ 'link-active': link.active }" :href="link.url" v-html="link.label" preserve-scroll/>
             </template>
         </div>
     </template>
