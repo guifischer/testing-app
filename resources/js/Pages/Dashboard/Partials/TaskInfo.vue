@@ -2,22 +2,27 @@
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
-import {router, useForm} from "@inertiajs/vue3";
+import {router, useForm, usePage} from "@inertiajs/vue3";
 import {ref} from "vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import SelectInput from "@/Components/SelectInput.vue";
-import normalizeTaskStatus from "@/helpers/normalizeTaskStatus.js";
-import normalizeTaskPriority from "@/helpers/normalizeTaskPriority.js";
+
 import TextareaInput from "@/Components/TextareaInput.vue";
-import TaskStatusEnum from "@/Enums/TaskStatusEnum.ts";
 import DangerButton from "@/Components/DangerButton.vue";
 
 const emit = defineEmits(['closeModal']);
-
 const props = defineProps({
     task: {
         type: Object,
         required: false,
+    },
+    taskStatus: {
+        type: Object,
+        required: true,
+    },
+    taskPriorities: {
+        type: Object,
+        required: true,
     },
 });
 
@@ -76,7 +81,7 @@ const updateTask = (url, options) => {
 };
 
 const completeTask = () => {
-    form.status = TaskStatusEnum.COMPLETED;
+    form.status = props.taskStatus.COMPLETED.value;
     save();
 };
 
@@ -106,7 +111,7 @@ const deleteTask = () => {
                 <div class="space-x-2">
                     <SecondaryButton @click="editingInfo=true">Edit</SecondaryButton>
 
-                    <template v-if="form.status === TaskStatusEnum.IN_PROGRESS">
+                    <template v-if="form.status === taskStatus.IN_PROGRESS.value">
                         <SecondaryButton @click="completeTask">Complete</SecondaryButton>
                     </template>
                 </div>
@@ -115,7 +120,7 @@ const deleteTask = () => {
         <div class="mt-6 border-t border-gray-100 flex flex-col">
 
                 <div class="mt-6">
-                    <InputLabel for="Name" value="Name" />
+                    <InputLabel for="name" value="Name" />
 
                     <TextInput
                         id="name"
@@ -131,7 +136,7 @@ const deleteTask = () => {
                 </div>
 
                 <div class="mt-6">
-                    <InputLabel for="Description" value="Description" />
+                    <InputLabel for="description" value="Description" />
 
                     <TextareaInput
                         id="description"
@@ -147,13 +152,13 @@ const deleteTask = () => {
                 </div>
 
                 <div class="mt-6">
-                    <InputLabel for="Status" value="Status" />
+                    <InputLabel for="status" value="Status" />
 
                     <SelectInput
                         id="status"
                         ref="statusInput"
                         v-model="form.status"
-                        :values="normalizeTaskStatus"
+                        :values="taskStatus"
                         type="text"
                         :class="[`mt-1 w-full`, !editingInfo ? 'bg-gray-100' : '']"
                         placeholder="Status"
@@ -164,13 +169,13 @@ const deleteTask = () => {
                 </div>
 
                 <div class="mt-6">
-                    <InputLabel for="Priority" value="Priority" />
+                    <InputLabel for="priority" value="Priority" />
 
                     <SelectInput
                         id="priority"
                         ref="priorityInput"
                         v-model="form.priority"
-                        :values="normalizeTaskPriority"
+                        :values="taskPriorities"
                         type="text"
                         :class="[`mt-1 w-full`, !editingInfo ? 'bg-gray-100' : '']"
                         placeholder="Priority"
