@@ -69,13 +69,13 @@ watch(form, data => {
             <SelectInput
                 :values="taskStatus"
                 v-model="form.status"
-                placeholder="Status"
+                placeholder="Select Status"
             />
 
             <SelectInput
                 :values="[{label: 'Own By Me', value: $page.props.auth.user.id}]"
                 v-model="form.owner"
-                placeholder="Owner"
+                placeholder="Select Owner"
             />
         </div>
 
