@@ -6,6 +6,7 @@ import {watch} from "vue";
 import SelectInput from "@/Components/SelectInput.vue";
 import TableHeader from "@/Components/TableHeader.vue";
 import {headerData} from "@/Pages/Dashboard/Partials/headerData.js";
+import {notify} from "@kyvg/vue3-notification";
 
 const props = defineProps({
     tasks: {
@@ -30,9 +31,12 @@ const changeOrder = ({order_by, order_type}) => {
 const takeOn = (task_id) => {
     router.patch(route('tasks.takeon', {task: task_id}), null, {
         preserveScroll: true,
-        onSuccess: () => closeModal(),
         onError: () => {
-            // Handle Error here - Add a message to user or something like that
+            notify({
+                title: "An Error Occurred",
+                text: "Failed to take on task",
+                type: "error"
+            });
         }
     });
 };
@@ -48,15 +52,6 @@ watch(form, data => {
     }, 500);
 
 }, {deep: true})
-
-// Options for the data display on mobile:
-
-// - Don't display specific columns on mobile
-// @media all and (min-width:0px) and (max-width: 320px) --> Use something like this to specific screen sizes. For example remove specific column on mobile
-
-// - Add a horizontal scroll to the table if too many columns
-
-// - Display the table like `cards` depending on the screen sizes with css
 </script>
 
 <template>

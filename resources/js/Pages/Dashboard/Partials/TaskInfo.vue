@@ -2,13 +2,14 @@
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
-import {router, useForm, usePage} from "@inertiajs/vue3";
+import {useForm} from "@inertiajs/vue3";
 import {ref} from "vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import SelectInput from "@/Components/SelectInput.vue";
 
 import TextareaInput from "@/Components/TextareaInput.vue";
 import DangerButton from "@/Components/DangerButton.vue";
+import {notify} from "@kyvg/vue3-notification";
 
 const emit = defineEmits(['closeModal']);
 const props = defineProps({
@@ -36,11 +37,6 @@ const new_task = {
 
 const form = useForm(props.task != null ? props.task : new_task);
 const editingInfo = ref(props.task == null);
-const nameInput = ref(null);
-const descriptionInput = ref(null);
-const statusInput = ref(null);
-const priorityInput = ref(null);
-const deadlineInput = ref(null);
 
 const cancelEdit = () => {
     form.reset();
@@ -58,9 +54,11 @@ const save = () => {
         preserveScroll: true,
         onSuccess: () => emit('closeModal'),
         onError: () => {
-            // Handle Error here - Add a message to user or something like that
-            // Reset the form field to initial value?
-            // use InputRef if we want to focus an element - Need to define what field to focus if we have multiple errors
+            notify({
+                title: "An Error Occurred",
+                text: "Failed to save the task",
+                type: "error"
+            });
         }
     };
 
@@ -89,7 +87,13 @@ const deleteTask = () => {
     form.delete(route('tasks.destroy', {task: props.task.id}), {
         preserveScroll: true,
         onSuccess: () => emit('closeModal'),
-        onError: () => console.log('error'), // Handle Error here - Add a message to user or something like that
+        onError: () => {
+            notify({
+                title: "An Error Occurred",
+                text: "Failed to delete task",
+                type: "error"
+            });
+        }
     });
 };
 
@@ -124,7 +128,6 @@ const deleteTask = () => {
 
                     <TextInput
                         id="name"
-                        ref="nameInput"
                         v-model="form.name"
                         type="text"
                         :class="[`mt-1 w-full`, !editingInfo ? 'bg-gray-100' : '']"
@@ -140,7 +143,6 @@ const deleteTask = () => {
 
                     <TextareaInput
                         id="description"
-                        ref="descriptionInput"
                         v-model="form.description"
                         type="text"
                         :class="[`mt-1 w-full`, !editingInfo ? 'bg-gray-100' : '']"
@@ -156,7 +158,6 @@ const deleteTask = () => {
 
                     <SelectInput
                         id="status"
-                        ref="statusInput"
                         v-model="form.status"
                         :values="taskStatus"
                         type="text"
@@ -173,7 +174,6 @@ const deleteTask = () => {
 
                     <SelectInput
                         id="priority"
-                        ref="priorityInput"
                         v-model="form.priority"
                         :values="taskPriorities"
                         type="text"
@@ -190,7 +190,6 @@ const deleteTask = () => {
 
                     <TextInput
                         id="due_at"
-                        ref="deadlineInput"
                         v-model="form.due_at"
                         type="date"
                         :class="[`mt-1 w-full`, !editingInfo ? 'bg-gray-100' : '']"
