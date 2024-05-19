@@ -10,6 +10,10 @@ defineProps({
         type: Object,
         required: true,
     },
+    placeholder: {
+        type: String,
+        default: 'Select an option',
+    },
 });
 
 defineEmits(['update:modelValue']);
@@ -32,8 +36,10 @@ defineExpose({ focus: () => input.value.focus() });
         @input="$emit('update:modelValue', $event.target.value)"
         ref="input">
 
-        <template v-for="(value, index) in values" :key="value">
-            <option :value="index">{{ value }}</option>
+        <option value="">{{ placeholder }}</option>
+
+        <template v-for="option in values" :key="option.value">
+            <option :value="option.value">{{ option.label }}</option>
         </template>
     </select>
 </template>

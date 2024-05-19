@@ -9,20 +9,20 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class TaskService
 {
 
-    public function getTasks(Request $request): array
+    public function getTasks(Request $request): AnonymousResourceCollection
     {
         $tasks = Task::query()
-                ->filter($request->only('search'))
-                ->paginate(10);
+                ->filter($request->only('search', 'status', 'owner'))
+                ->orderBy($request->get('order_by', 'created_at'), $request->get('order_type', 'desc'))
+                ->paginate(10)
+                ->withQueryString();
 
-        return [
-            'filters' => $request->all('search'),
-            'tasks' => TaskDetailsResource::collection($tasks)
-        ];
+        return TaskDetailsResource::collection($tasks);
     }
 
     public function create(array $data, int $user_id): Model|Builder
