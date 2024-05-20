@@ -6,12 +6,14 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
+import {Notifications} from "@kyvg/vue3-notification";
 
 const showingNavigationDropdown = ref(false);
 </script>
 
 <template>
     <div>
+        <notifications position="bottom right" />
         <div class="min-h-screen bg-gray-100">
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
