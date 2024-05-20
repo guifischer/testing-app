@@ -44,13 +44,15 @@ const takeOn = (task_id) => {
 watch(form, data => {
     clearTimeout(delayTimeout);
 
-    delayTimeout = setTimeout(() => {
-        data.get('/dashboard', {
-            preserveState: true,
-            preserveScroll: true,
-        });
+    if (data.isDirty) {
+        delayTimeout = setTimeout(() => {
+            data.get('/dashboard', {
+                preserveState: true,
+                preserveScroll: true,
+            });
 
-    }, 500);
+        }, 500);
+    }
 
 }, {deep: true})
 </script>
