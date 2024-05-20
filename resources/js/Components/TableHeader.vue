@@ -31,7 +31,7 @@ const changeOrder = (key) => {
     <thead>
         <tr>
             <template v-for="(header, index) in tableHeaders" :key="index">
-                <th scope="col">
+                <th scope="col" :class="header.hide_on_mobile ? 'hide-on-mobile' : ''">
                     <template v-if="header.order_available && !header.hide">
                         <span @click="changeOrder(header.key)" class="custom-class-th-orderable">
                             {{ header.label }}

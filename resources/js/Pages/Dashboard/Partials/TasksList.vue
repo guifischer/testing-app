@@ -92,10 +92,10 @@ watch(form, data => {
                     <td>
                         {{ task.name }}
                     </td>
-                    <td>
+                    <td class="hide-on-mobile">
                         {{ task.description }}
                     </td>
-                    <td>
+                    <td class="hide-on-mobile">
                         {{ task.user_name ?? "-" }}
                     </td>
                     <td class="custom-class-full-text">
@@ -132,12 +132,13 @@ watch(form, data => {
 .custom-class-box {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     margin-bottom: 1rem;
     gap: 0.5rem;
 }
 
 .custom-class-box .custom-class-search-input {
-    flex-grow: 1;
+    width: 100%;
 }
 
 .custom-class-table {
@@ -186,6 +187,27 @@ watch(form, data => {
 
 .custom-class-actions span:first-child {
     margin-right: 0.5rem;
+}
+
+.hide-on-mobile {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .custom-class-box select {
+        flex: 1
+    }
+}
+
+@media (min-width: 1024px) {
+    .hide-on-mobile {
+        display: table-cell;
+    }
+
+    .custom-class-box .custom-class-search-input {
+        flex-grow: 1;
+        width: auto;
+    }
 }
 
 </style>

@@ -154,6 +154,12 @@ const deleteTask = () => {
                 </div>
 
                 <div class="mt-6">
+                    <InputLabel for="name" value="Owner" />
+
+                    <span>{{ form.user_name ?? "-" }}</span>
+                </div>
+
+                <div class="mt-6">
                     <InputLabel for="status" value="Status" />
 
                     <SelectInput
